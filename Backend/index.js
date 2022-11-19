@@ -4,12 +4,6 @@ const route = require("./routes/routes");
 const mongoose = require("mongoose");
 const auth = require("./routes/auth");
 const buses = require("./routes/buses");
-const config = require("config");
-
-if (!config.get("jwtPrivateKey")) {
-  console.log("Fatal Error: jwtPrivateKey is not defined");
-  process.exit(1);
-}
 
 const app = express();
 

@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
   user.password = hashed;
   await user.save();
 
-  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+  const token = jwt.sign({ _id: user._id }, process.env.JWTPRIVATEKEY);
 
   res
     .header("x-auth-token", token)
