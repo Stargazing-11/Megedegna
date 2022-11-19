@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const { User, validate } = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
+const jwt = require("jwt");
+const config = require("config");
 
 const router = express.Router();
 
@@ -19,8 +21,14 @@ router.post("/register", async (req, res) => {
   const user = new User(
     _.pick(req.body, ["firstName", "lastName", "email", "password", "phone"])
   );
+  user.password = hashed;
   await user.save();
-  res.send(_.pick(user, ["_id", "firstName", "lastName", "phone"]));
+
+  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["_id", "firstName", "lastName", "phone"]));
 });
 
 module.exports = router;
