@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { User, validate } = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
-const jwt = require("jwt");
+const jwt = require("jsonwebtoken");
 const config = require("config");
 
 const router = express.Router();

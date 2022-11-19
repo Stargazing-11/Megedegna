@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
   res.send(token);
 });
 
-export function validate(req) {
+function validate(req) {
   const schema = Joi.object({
     phone: Joi.number().required(),
     password: Joi.string().required().min(8),
