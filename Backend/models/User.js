@@ -22,6 +22,8 @@ const userSchema = mongoose.Schema({
   },
   phone: {
     type: String,
+    min: 10,
+    max: 10,
     required: true,
   },
   password: {
@@ -38,11 +40,10 @@ export function validate(userSchema) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),
-    email: Joi.string().email(),
-    phone: Joi.number().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().min(10).max(10).required(),
     password: Joi.string().required().min(8),
   });
 
   return schema.validate(userSchema);
 }
-

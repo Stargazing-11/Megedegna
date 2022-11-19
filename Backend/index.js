@@ -1,19 +1,25 @@
 import express from "express";
 import users from "./routes/users.js";
-import route from './routes/route.js';
-import mongoose from 'mongoose';
-import auth from "./routes/auth.js"
+import route from "./routes/route.js";
+import mongoose from "mongoose";
+import auth from "./routes/auth.js";
+import config from "config";
+
+if (!config.get("jwtPrivateKey")) {
+  console.log("Fatal Error: jwtPrivateKey is not defined");
+  process.exit(1);
+}
 
 const app = express();
 
 //mongoose setup
-mongoose.connect('mongodb://localhost/mengedegna')
-    .then(() => console.log('Connected to Mongodb ...'))
-    .catch(err => console.error("Couldn't connect to MongoDB", err))
+mongoose
+  .connect("mongodb://localhost/mengedegna")
+  .then(() => console.log("Connected to Mongodb ..."))
+  .catch((err) => console.error("Couldn't connect to MongoDB", err));
 
-
-// App Use 
-app.use(express.json())
+// App Use
+app.use(express.json());
 app.use("/api/user", users);
 app.use("/api/route/", route);
 app.use("/api/auth", auth);
