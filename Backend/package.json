@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Bus Ticket Booking System",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Joi from "joi";
+const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const userSchema = mongoose.Schema({
   // role: {
@@ -32,9 +32,9 @@ const userSchema = mongoose.Schema({
   },
 });
 
-export const User = mongoose.model("User", userSchema);
+exports.User = mongoose.model("User", userSchema);
 
-export function validate(userSchema) {
+exports.validate = function (userSchema) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),
@@ -44,5 +44,4 @@ export function validate(userSchema) {
   });
 
   return schema.validate(userSchema);
-}
-
+};

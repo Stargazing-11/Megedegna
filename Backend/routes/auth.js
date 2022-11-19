@@ -1,8 +1,9 @@
-import express from "express";
-import mongoose from "mongoose";
-import { User } from "../models/User.js";
-import bcrypt from "bcrypt";
-import Joi from "joi";
+const express = require("express");
+const mongoose = require("mongoose");
+const { User } = require("../models/User.js");
+const bcrypt = require("bcrypt");
+const Joi = require("joi");
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -12,21 +13,22 @@ router.post("/", async (req, res) => {
   let result = await User.findOne({ phone: req.body.phone });
   if (!result) return res.status(400).send("Invalid phone or phone. ");
 
-  const validPassword = await bcrypt.compare(req.body.password, result.password);
-  if(!validPassword) return res.status(400).send("Invalid phone or password. ");
-  
+  const validPassword = await bcrypt.compare(
+    req.body.password,
+    result.password
+  );
+  if (!validPassword)
+    return res.status(400).send("Invalid phone or password. ");
+
   res.send(true);
 });
 
-export function validate(req) {
-
-    const schema = Joi.object({
-      phone: Joi.number().required(),
-      password: Joi.string().required().min(8),
-    });
-    return schema.validate(req);
-
+function validate(req) {
+  const schema = Joi.object({
+    phone: Joi.number().required(),
+    password: Joi.string().required().min(8),
+  });
+  return schema.validate(req);
 }
-  
 
-export default router;
+module.exports = router;

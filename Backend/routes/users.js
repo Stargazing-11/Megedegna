@@ -1,8 +1,8 @@
-import express from "express";
-import mongoose from "mongoose";
-import { User, validate } from "../models/User.js";
-import bcrypt from "bcrypt";
-import _ from "lodash";
+const express = require("express");
+const mongoose = require("mongoose");
+const { User, validate } = require("../models/User.js");
+const bcrypt = require("bcrypt");
+const _ = require("lodash");
 
 const router = express.Router();
 
@@ -20,8 +20,7 @@ router.post("/register", async (req, res) => {
     _.pick(req.body, ["firstName", "lastName", "email", "password", "phone"])
   );
   await user.save();
-  res.send(_.pick(user, ["_id", "firstName","lastName", "phone"]));
+  res.send(_.pick(user, ["_id", "firstName", "lastName", "phone"]));
 });
 
-export default router;
-
+module.exports = router;
