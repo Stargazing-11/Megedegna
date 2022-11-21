@@ -1,14 +1,30 @@
-const express = require("express");
 const { BusAssignment, findError } = require("../models/busAssignment");
 const { Bus } = require("../models/bus");
+const { Route } = require("../models/route");
+const { findRouteIfExists } = require("./route");
+const { getPrice } = require("../utils/helper");
+
+const express = require("express");
 const _ = require("lodash");
+const Joi = require("joi");
+
+function findError(travelInfo) {
+  const schema = Joi.object({
+    startCity: Joi.string().required(),
+    destination: Joi.string().required(),
+    date: Joi.date(),
+  });
+  const { error, value } = schema.validate(travelInfo);
+  return error;
+}
 
 exports.createBus = async function (req, res, next) {
   if (!findError(req.body)) {
     let bus = await Bus.findById(req.body.bus).populate("route");
-    if (!bus) {
+    let route = await Route.findById(req.body.route);
+    if (!bus || !route) {
       return res.status(404).send({
-        message: "bus does not exist",
+        message: "bus or route does not exist",
       });
     }
 
@@ -16,11 +32,7 @@ exports.createBus = async function (req, res, next) {
       bus: bus._id,
       dateOfTravel: req.body.dateOfTravel,
       occupied: bus.structure,
-      route: {
-        startCity: bus.route.startCity,
-        destination: bus.route.destination,
-        distance: bus.route.distance,
-      },
+      route: route._id,
     });
     busAssignment = await busAssignment.save();
     return res.status(201).send(busAssignment);
@@ -29,8 +41,34 @@ exports.createBus = async function (req, res, next) {
 };
 
 exports.getBusAssignment = async function (req, res, next) {
-  const bus = await BusAssignment.findById(req.params.id).populate("bus");
+  const busAssignment = await BusAssignment.findById(req.params.id).populate(
+    "bus"
+  );
   return res.send(bus);
+};
+
+exports.checkIfBusIsAssigned = async function (req, res, next) {
+  if (findError(req.params))
+    return res.status(422).send({ message: "Validation error" });
+  if (String(Date.now()) > String(req.body.date))
+    return res.status(422).send({ message: "The date is incorrect" });
+  const route = await findRouteIfExists(
+    req.params.startCity,
+    req.params.destination
+  );
+  if (!route) {
+    return res.status(404).send({ message: "Route does not exist" });
+  }
+  const busAssignment = await BusAssignment.findOne({
+    dateOfTravel: new Date(req.params.date),
+    route: route,
+  }).populate("route");
+  if (!busAssignment)
+    return res.status(404).send({ message: "No Bus is assigned" });
+  return {
+    busAssignment,
+    totalPrice: busAssignment.route.distance * getPrice(),
+  };
 };
 
 // exports.getBus = async function (req, res, next) {

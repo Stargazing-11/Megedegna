@@ -28,11 +28,20 @@ exports.getAllRoutes = async function (req, res, next) {
   return res.send(route);
 };
 
-exports.getFiltered = async function (req, res, next) {
+async function findRouteIfExists(startCity, destination) {
   let route = await Route.find({
-    startCity: capitalize(req.params.startCity),
-    destination: capitalize(req.params.destination),
+    startCity: capitalize(startCity),
+    destination: capitalize(destination),
   });
+  return route;
+}
+exports.findRouteIfExists = findRouteIfExists;
+
+exports.getFiltered = async function (req, res, next) {
+  let route = await findRouteIfExists(
+    req.params.startCity,
+    req.params.destination
+  );
   return res.send(route);
 };
 

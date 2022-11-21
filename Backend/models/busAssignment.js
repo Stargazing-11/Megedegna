@@ -15,11 +15,11 @@ const busAssignmentSchema = mongoose.Schema({
     type: Array,
     required: true,
   },
-  route: new mongoose.Schema({
-    startCity: String,
-    destination: String,
-    distance: Number,
-  }),
+  route: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    rel: 'Route'
+  },
 });
 
 const BusAssignment = mongoose.model("BusAssignment", busAssignmentSchema);
@@ -28,6 +28,7 @@ function findError(busAssignment) {
   const schema = Joi.object({
     bus: Joi.string().required(),
     dateOfTravel: Joi.date(),
+    route: Joi.string(),
   });
   const { error, value } = schema.validate(busAssignment);
   return error;
