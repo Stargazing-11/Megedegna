@@ -14,7 +14,7 @@ const busSchema = mongoose.Schema({
   route: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    rel: "Route",
+    ref: "Route",
   },
   structure: {
     type: Array,

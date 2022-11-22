@@ -16,6 +16,7 @@ exports.createBus = async function (req, res, next) {
     bus = await bus.save();
     return res.status(201).send(bus);
   }
+
   return res.status(422).send({ message: "Validation error" });
 };
 

@@ -18,7 +18,7 @@ const busAssignmentSchema = mongoose.Schema({
   route: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    rel: 'Route'
+    ref: 'Route'
   },
 });
 

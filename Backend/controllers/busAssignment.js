@@ -70,25 +70,3 @@ exports.checkIfBusIsAssigned = async function (req, res, next) {
     totalPrice: busAssignment.route.distance * getPrice(),
   };
 };
-
-// exports.getBus = async function (req, res, next) {
-//   let bus = await Bus.findById(req.params.id);
-//   if (bus) return res.send(bus);
-//   return res.status(404).send({ message: "Some error" });
-// };
-
-// exports.editBus = async function (req, res, next) {
-//   if (!findError(req.body)) {
-//     let bus = await Bus.findById(req.params.id);
-//     if (!bus) return res.status(404).send({ message: "route does not exist" });
-
-//     bus.number = req.body.number;
-//     bus.status = req.body.status;
-//     bus.structure = req.body.structure;
-//     bus.route = req.body.route;
-
-//     bus = await bus.save();
-//     return res.status(201).send(bus);
-//   }
-//   return res.status(422).send({ message: "Validation error" });
-// };
