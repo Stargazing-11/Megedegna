@@ -19,23 +19,6 @@ exports.createBooking = async function (req, res, next) {
     return res.status(201).send(book);
   }
 };
-exports.editBooking = async function (req, res, next) {
-  if (!findError(req.body)) {
-    let booking = await Booking.findById(req.params.id);
-    if (!booking)
-      return res.status(404).send({ message: "booking does not exist" });
-
-    booking.firstName = req.body.firstName;
-    booking.lastName = req.body.lastName;
-    booking.phone = req.body.phone;
-    booking.seat = req.body.seat;
-    booking.dateOfTravel = req.body.dateOfTravel;
-
-    booking = await booking.save();
-    return res.status(201).send(booking);
-  }
-  return res.status(422).send({ message: "Validation error" });
-};
 
 exports.getAllBookingonDate = async function (req, res, next) {
   const bookings = await Booking.find({
