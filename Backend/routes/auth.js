@@ -8,28 +8,28 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (findError(req.body))
+    return res.status(422).send({ message: "Validation error" });
 
   let user = await User.findOne({ phone: req.body.phone });
-  if (!user) return res.status(400).send("Invalid phone or phone. ");
-  console.log(user);
+  if (!user) return res.status(400).send("Invalid phone or password. ");
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
 
   if (!validPassword)
     return res.status(400).send("Invalid phone or password. ");
-
-  const token = jwt.sign({ _id: user._id }, process.env.JWTPRIVATEKEY);
-  res.send(token);
+  res
+    .header("x-auth-token", user.generateAuthToken())
+    .send(_.pick(user, ["_id", "firstName", "lastName", "phone", "role"]));
 });
 
-function validate(req) {
+function findError(req) {
   const schema = Joi.object({
-    phone: Joi.number().required(),
+    phone: Joi.string().min(10).max(10).required(),
     password: Joi.string().required().min(8),
   });
-  return schema.validate(req);
+  let { error } = schema.validate(req);
+  return error;
 }
 
 module.exports = router;
