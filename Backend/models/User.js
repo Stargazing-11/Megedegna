@@ -57,9 +57,9 @@ exports.findError = function (userSchema) {
     email: Joi.string().email().required(),
     phone: Joi.string().min(10).max(10).required(),
     password: Joi.string().required().min(8),
-    role: Joi.string().enum(["Admin", "Passenger"]),
+    role: Joi.string().valid("Admin", "Passenger"),
   });
-  let { error, value } = schema.validate(userSchema);
+  let { error } = schema.validate(userSchema);
   return error;
 };
 

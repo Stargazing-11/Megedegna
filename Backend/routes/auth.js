@@ -1,11 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const { User } = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const config = require("config");
-const jwt = require("jsonwebtoken");
 const router = express.Router();
+const _ = require("lodash");
 
 router.post("/", async (req, res) => {
   if (findError(req.body))

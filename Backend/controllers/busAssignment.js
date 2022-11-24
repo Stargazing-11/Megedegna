@@ -1,10 +1,12 @@
-const { BusAssignment, findError } = require("../models/busAssignment");
+const {
+  BusAssignment,
+  findError: findErrorAlias,
+} = require("../models/busAssignment");
 const { Bus } = require("../models/bus");
 const { Route } = require("../models/route");
 const { findRouteIfExists } = require("./route");
 const { getPrice } = require("../utils/helper");
 
-const express = require("express");
 const _ = require("lodash");
 const Joi = require("joi");
 
@@ -19,7 +21,7 @@ function findError(travelInfo) {
 }
 
 exports.createBus = async function (req, res, next) {
-  if (!findError(req.body)) {
+  if (!findErrorAlias(req.body)) {
     let bus = await Bus.findById(req.body.bus).populate("route");
     let route = await Route.findById(req.body.route);
     if (!bus || !route) {

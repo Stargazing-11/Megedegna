@@ -6,7 +6,8 @@ const auth = require("./routes/auth");
 const buses = require("./routes/buses");
 const busAssignment = require("./routes/busAssignments");
 const price = require("./routes/price");
-
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 
 //mongoose setup
@@ -17,7 +18,7 @@ mongoose
 
 // App Use
 app.use(express.json());
-app.use("/api/user", users);
+app.use("/api/users", users);
 app.use("/api/routes", route);
 app.use("/api/auth", auth);
 app.use("/api/buses", buses);
@@ -25,7 +26,7 @@ app.use("/api/busAssignments", busAssignment);
 app.use("/api/price", price);
 
 app.use(function (err, req, res, next) {
-  return res.status(500).send({ message: "Sth went wrong" });
+  return res.status(500).send({ message: "Sth went wrong", error: err });
 });
 
 const port = process.env.PORT || 5000;
