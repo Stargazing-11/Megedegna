@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const auth = require("./routes/auth");
 const buses = require("./routes/buses");
 const busAssignment = require("./routes/busAssignments");
+const booking = require("./routes/booking");
 const price = require("./routes/price");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -24,6 +25,7 @@ app.use("/api/auth", auth);
 app.use("/api/buses", buses);
 app.use("/api/busAssignments", busAssignment);
 app.use("/api/price", price);
+app.use("/api/booking", booking);
 
 app.use(function (err, req, res, next) {
   return res.status(500).send({ message: "Sth went wrong", error: err });

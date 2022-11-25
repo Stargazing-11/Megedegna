@@ -1,6 +1,5 @@
-import Joi, { date } from "joi";
-import mongoose, { mongo } from "mongoose";
-import { Route } from "./route";
+const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const schema = mongoose.Schema({
   user: {
@@ -30,10 +29,6 @@ const schema = mongoose.Schema({
     type: String,
     required: true,
   },
-  dateOfTravel: {
-    type: date,
-    required: true,
-  },
   busAssigned: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -47,9 +42,9 @@ function findError(busAssignment) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),
-    dateOfTravel: Joi.date().required(),
-    route: Joi.string().required(),
     seat: Joi.string().required(),
+    phoneNumber:Joi.string().required(),
+    busAssigned:Joi.string().required()
   });
   const { error, value } = schema.validate(busAssignment);
   return error;

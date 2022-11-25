@@ -39,7 +39,7 @@ exports.createBus = async function (req, res, next) {
     busAssignment = await busAssignment.save();
     return res.status(201).send(busAssignment);
   }
-  return res.status(422).send({ message: "Validation error" });
+  return res.status(422).send({ message: findErrorAlias(req.body) });
 };
 
 exports.getBusAssignment = async function (req, res, next) {

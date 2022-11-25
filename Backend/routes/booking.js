@@ -8,14 +8,13 @@ const {
   editBooking,
 } = require("../controllers/booking");
 const { errorHandler } = require("../utils/errorHandler");
-
+const { auth } = require("../middlewares/auth");
 const router = express.Router();
 
-router.post("/", errorHandler(createBooking));
-router.get("/", errorHandler(getBookingsForCurrentUser));
-router.get("/:date", errorHandler(getAllBookingonDate));
-router.get("/", errorHandler(getFutureBookings));
-router.get("/", errorHandler(getPastBookings));
-router.put("/:id", errorHandler(editBooking));
+router.post("/", auth, errorHandler(createBooking));
+router.get("/", auth, errorHandler(getBookingsForCurrentUser));
+router.get("/onDate/:busAssignedId", errorHandler(getAllBookingonDate));
+router.get("/future/",auth, errorHandler(getFutureBookings));
+router.get("/past/", auth, errorHandler(getPastBookings));
 
 module.exports = router;
