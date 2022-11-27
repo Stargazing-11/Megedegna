@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
+import 'package:mengedegna_flutter/Screens/seat.dart';
 import 'package:mengedegna_flutter/Screens/ticket.dart';
 
 import 'Common/common.dart';
@@ -11,7 +12,6 @@ class BookInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(83, 0, 0, 0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,8 +59,40 @@ class BookInformation extends StatelessWidget {
             field('First Name'),
             field('Last Name'),
             field('Phone '),
-            field('Seat'),
-            button('Book', Icon(Icons.next_plan), context, Ticket()),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Seat:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(3),
+                  width: 40,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color.fromARGB(255, 44, 99, 145)),
+                  child: IconButton(
+                    tooltip: 'Pick A Seat',
+                    icon: Icon(
+                      Icons.chair_rounded,
+                      color: Colors.white,
+                      size: 27,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Seat()));
+                    },
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(onPressed: () {}, child: Text('Book')),
           ],
         ),
       ),

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps, prefer_final_fields
 import 'package:flutter/material.dart';
 import 'package:mengedegna_flutter/Screens/bookInformation.dart';
 
@@ -12,10 +12,10 @@ class BookNew extends StatefulWidget {
 }
 
 class _BookNewState extends State<BookNew> {
+  DateTime _dateTime = DateTime(2019);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(83, 0, 0, 0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,43 +35,60 @@ class _BookNewState extends State<BookNew> {
             ),
             field('Start City'),
             field('Destination'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Text(
-                  'Date:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
+                Text('Pick A Date:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15,
+                    )),
                 SizedBox(
-                  width: 10,
+                  height: 4,
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: 70,
-                  height: 30,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.date_range,
-                      color: Colors.black,
+                MaterialButton(
+                  color: Color.fromARGB(255, 52, 153, 131),
+                  onPressed: () {
+                    showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2021),
+                            lastDate: DateTime(DateTime.now().year + 2))
+                        .then((value) => {
+                              setState(() {
+                                _dateTime = value!;
+                              })
+                            });
+                  },
+                  child: Container(
+                    width: 170,
+                    padding: EdgeInsets.symmetric(horizontal: 3, vertical: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _dateTime == DateTime(2019)
+                              ? " "
+                              : '${_dateTime.day.toString()}/${_dateTime.month.toString()}/${_dateTime.year.toString()}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              decoration: TextDecoration.underline,
+                              decorationThickness: 5),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.date_range),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            button(
-              'Next',
-              Icon(Icons.forward),
-              context,
-              BookInformation()
-            ),
+            ElevatedButton(onPressed: () {}, child: Text('Next')),
           ],
         ),
       ),

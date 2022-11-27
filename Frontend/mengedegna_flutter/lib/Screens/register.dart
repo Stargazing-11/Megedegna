@@ -11,7 +11,6 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(83, 0, 0, 0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,6 +47,7 @@ class Register extends StatelessWidget {
             ),
             field('First Name'),
             field('Last Name'),
+            field('Phone'),
             field('Password'),
             button('Sign up', null, context, Booked()),
             TextButton(

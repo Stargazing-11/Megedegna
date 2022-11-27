@@ -20,7 +20,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(83, 0, 0, 0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -65,14 +64,18 @@ class Home extends StatelessWidget {
                 },
               ),
             ),
-            button(
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
                 'Get Started',
-                Icon(
-                  Icons.forward,
-                  size: 26.0,
+                style: TextStyle(
+                  fontSize: 17,
                 ),
-                context,
-                Register())
+              ),
+            ),
+            SizedBox(
+              height: 80,
+            )
           ],
         ),
       ),

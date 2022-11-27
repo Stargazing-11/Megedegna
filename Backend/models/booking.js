@@ -26,13 +26,17 @@ const schema = mongoose.Schema({
     max: 10,
   },
   seat: {
-    type: String,
+    type: Array,
     required: true,
   },
   busAssigned: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "BusAssignment",
+  },
+  paid: {
+    type: Boolean,
+    default: true,
   },
 });
 
@@ -42,9 +46,9 @@ function findError(busAssignment) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),
-    seat: Joi.string().required(),
-    phoneNumber:Joi.string().required(),
-    busAssigned:Joi.string().required()
+    seat: Joi.array().required(),
+    phoneNumber: Joi.string().required(),
+    busAssigned: Joi.string().required(),
   });
   const { error, value } = schema.validate(busAssignment);
   return error;

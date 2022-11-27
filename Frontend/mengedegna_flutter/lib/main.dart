@@ -5,8 +5,6 @@ import 'package:mengedegna_flutter/Screens/bookNew.dart';
 import 'package:mengedegna_flutter/Screens/booked.dart';
 import 'package:mengedegna_flutter/Screens/ticket.dart';
 
-import 'Screens/register.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -19,10 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
-      home: const BookNew(),
+      theme: ThemeData(primarySwatch: Colors.blue, brightness: Brightness.dark),
+      home: const Home(),
       debugShowCheckedModeBanner: false,
     );
   }

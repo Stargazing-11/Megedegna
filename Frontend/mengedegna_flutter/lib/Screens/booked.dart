@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps
 import 'package:flutter/material.dart';
+import 'package:mengedegna_flutter/Screens/bookNew.dart';
 
 import 'Common/common.dart';
+import 'Home.dart';
 
 class Booked extends StatefulWidget {
   const Booked({super.key});
@@ -21,7 +23,6 @@ class _BookedState extends State<Booked> {
   ];
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(83, 0, 0, 0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -75,6 +76,13 @@ class _BookedState extends State<Booked> {
         backgroundColor: Color.fromARGB(78, 0, 0, 0),
         elevation: 2.0,
         currentIndex: 1,
+        onTap: (value) => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BookNew(),
+            ),
+          )
+        },
         items: [
           BottomNavigationBarItem(
               icon: Icon(
