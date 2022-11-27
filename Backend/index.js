@@ -19,6 +19,7 @@ mongoose
 
 // App Use
 app.use(express.json());
+app.use("/static", express.static("public"));
 app.use("/api/users", users);
 app.use("/api/routes", route);
 app.use("/api/auth", auth);

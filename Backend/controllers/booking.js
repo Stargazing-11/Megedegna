@@ -3,14 +3,19 @@ const { BusAssignment } = require("../models/busAssignment");
 const { getPrice } = require("../utils/helper");
 const qrCode = require("qrcode");
 const PDF = require("pdfkit");
-const nodemailer = require("nodemailer");
 const fs = require("fs");
+const { reserveSeat } = require("./busAssignment");
+const sendMail = require("../utils/mail");
+const { User } = require("../models/User");
 
 exports.createBooking = async function (req, res, next) {
   let busAssigned = await BusAssignment.findById(req.body.busAssigned)
     .populate("bus")
     .populate("route");
-  if (busAssigned.occupied[req.body.seat[0][1]] == 1) {
+  const row = req.body.seat[0];
+  const column = req.body.seat[1];
+
+  if (busAssigned.occupied[row][column] == 1) {
     return res.status(401).send("This Seat is Already Taken");
   }
   if (!findError(req.body)) {
@@ -22,7 +27,7 @@ exports.createBooking = async function (req, res, next) {
       seat: req.body.seat,
       busAssigned: busAssigned._id,
     });
-    busAssigned[req.body.seat[0][1]] = 1;
+
     let data = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -32,13 +37,19 @@ exports.createBooking = async function (req, res, next) {
       destination: busAssigned.route.destination,
       distance: busAssigned.route.distance,
     };
+    const ok = await reserveSeat(busAssigned._id, row, column);
+    if (!ok) throw Error("pb");
     booking = await booking.save();
-    console.log(booking.seat, await BusAssignment.findById(req.body.busAssigned))
-
-    const img = await qrGenerator(data);
-    setTimeout(async () => {
-      await generatePdf(data, img);
-    }, 1000);
+    const img = await qrGenerator(data, busAssigned._id);
+    await generatePdf(data, img, busAssigned._id);
+    let user = await User.findById(req.user);
+    if (user.email) {
+      sendMail(
+        "Ticket",
+        user.email,
+        `<a href=${process.env.BACKEND}static/${busAssigned._id}${data.seat[0]}${data.seat[1]}.pdf>link</a>`
+      );
+    }
     return res.status(201).send(booking);
   }
   return res.status(422).send({ message: findError(req.body) });
@@ -56,7 +67,6 @@ exports.getAllBookingonDate = async function (req, res, next) {
     dateOfTravel: busAssigned.dateOfTravel,
     busAssigned: busAssigned._id,
   });
-  sendEmail();
   return res.status(201).send(bookings);
 };
 
@@ -88,19 +98,30 @@ exports.getFutureBookings = async function (req, res, next) {
   return res.status(200).send(pastBookings);
 };
 
-async function qrGenerator(data) {
-  let json = JSON.stringify(data);
-
-  qrCode.toFile("qrCode.png", json, function (err, file) {
-    if (err) return console.log(err);
-    return file;
+const qrGenerator = async (data, busAssignedId) => {
+  return new Promise((res, rej) => {
+    qrCode.toFile(
+      `public/${busAssignedId}${data.seat[0]}${data.seat[1]}.png`,
+      JSON.stringify(data),
+      (err, file) => {
+        res(file);
+      }
+    );
   });
-}
+};
+// function (err, file) {
+//   if (err) return console.log(err);
+//   return file;
+// });
 
-async function generatePdf(data, img) {
+async function generatePdf(data, img, busAssignedId) {
   console.log("heree");
   const doc = new PDF();
-  doc.pipe(fs.createWriteStream("Ticket.pdf"));
+  doc.pipe(
+    fs.createWriteStream(
+      `public/${busAssignedId}${data.seat[0]}${data.seat[1]}.pdf`
+    )
+  );
 
   doc.font("Times-Bold").fontSize(25).fillColor("blue");
   doc.text("Passenger Name: " + data.firstName + " " + data.lastName, {
@@ -117,7 +138,7 @@ async function generatePdf(data, img) {
     align: "center",
   });
 
-  doc.image("qrCode.png", {
+  doc.image(`public/${busAssignedId}${data.seat[0]}${data.seat[1]}.png`, {
     fit: [200, 200],
     align: "right",
   });

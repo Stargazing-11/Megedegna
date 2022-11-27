@@ -9,6 +9,7 @@ const { getPrice } = require("../utils/helper");
 
 const _ = require("lodash");
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
 function findError(travelInfo) {
   const schema = Joi.object({
@@ -19,6 +20,21 @@ function findError(travelInfo) {
   const { error, value } = schema.validate(travelInfo);
   return error;
 }
+
+exports.reserveSeat = async function (busAssignmentId, row, column) {
+  try {
+    let busAssignment = await BusAssignment.findById(busAssignmentId);
+    let occupied = [...busAssignment.occupied];
+    mongoose.set("debug", true);
+    occupied[row][column] = 1;
+    busAssignment.occupied = [...occupied];
+    busAssignment.markModified("occupied");
+    busAssignment = await busAssignment.save();
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 
 exports.createBus = async function (req, res, next) {
   if (!findErrorAlias(req.body)) {
@@ -46,7 +62,7 @@ exports.getBusAssignment = async function (req, res, next) {
   const busAssignment = await BusAssignment.findById(req.params.id).populate(
     "bus"
   );
-  return res.send(bus);
+  return res.send(busAssignment);
 };
 
 exports.checkIfBusIsAssigned = async function (req, res, next) {
