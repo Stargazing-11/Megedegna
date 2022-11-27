@@ -41,9 +41,10 @@ Widget button(lable, icon, context, page) {
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
     child: ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => page,
+          ),
         );
       },
       child: Row(
@@ -51,7 +52,7 @@ Widget button(lable, icon, context, page) {
         children: [
           Text(
             lable,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ), // <-- Text
           SizedBox(
             width: 5,
