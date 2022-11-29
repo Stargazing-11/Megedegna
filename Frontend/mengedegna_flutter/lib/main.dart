@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mengedegna_flutter/Screens/Home.dart';
+import 'package:mengedegna_flutter/Screens/Loading.dart';
 import 'package:mengedegna_flutter/Screens/bookInformation.dart';
 import 'package:mengedegna_flutter/Screens/bookNew.dart';
 import 'package:mengedegna_flutter/Screens/booked.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue, brightness: Brightness.dark),
-      home: const Home(),
+      home: const Loading(),
       debugShowCheckedModeBanner: false,
     );
   }
