@@ -36,7 +36,7 @@ exports.reserveSeat = async function (busAssignmentId, row, column) {
   }
 };
 
-exports.createBus = async function (req, res, next) {
+exports.createBusAssignemnt = async function (req, res, next) {
   if (!findErrorAlias(req.body)) {
     let bus = await Bus.findById(req.body.bus).populate("route");
     let route = await Route.findById(req.body.route);
