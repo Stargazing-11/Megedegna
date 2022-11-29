@@ -68,7 +68,7 @@ exports.getBusAssignment = async function (req, res, next) {
 exports.checkIfBusIsAssigned = async function (req, res, next) {
   if (findError(req.params))
     return res.status(422).send({ message: "Validation error" });
-  if (String(Date.now()) > String(req.body.date))
+  if (String(Date.now()) > String(req.params.date))
     return res.status(422).send({ message: "The date is incorrect" });
   const route = await findRouteIfExists(
     req.params.startCity,
