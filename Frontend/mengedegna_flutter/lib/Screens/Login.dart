@@ -7,13 +7,13 @@ import 'package:mengedegna_flutter/Screens/Loading.dart';
 
 import '../Logic/blocs/Booking/Booking_Bloc.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
   @override
-  State<Register> createState() => _RegisterState();
+  State<Login> createState() => _LoginState();
 }
 
-class _RegisterState extends State<Register> {
+class _LoginState extends State<Login> {
   late BookingBloc bloc;
 
   @override
@@ -23,7 +23,21 @@ class _RegisterState extends State<Register> {
   }
 
   Loading loading = Loading();
+  List cities = [
+    "Addis Ababa",
+    'Debre Markos',
+    'Bahir Dar',
+    'Hawassa',
+    'Gonder',
+    'Arba Minch',
+    'Dessie',
+    'Ambo'
+  ];
+  List choose = ['Choose Start city', 'Choose destination'];
 
+  DateTime _dateTime = DateTime(2011);
+  String startcity = '';
+  String destination = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +59,7 @@ class _RegisterState extends State<Register> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Sign Up',
+                  'Sign In',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                 ),
                 Container(
@@ -62,35 +76,9 @@ class _RegisterState extends State<Register> {
                         TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            label: Text('First Name:'),
-                            hintText: 'Bruk, ...',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
-                        ),
-                        TextField(
-                          style: TextStyle(fontSize: 15),
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            label: Text('Last Name:'),
-                            hintText: 'Mekonennen, ...',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
-                        ),TextField(
-                          style: TextStyle(fontSize: 15),
-                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email_rounded),
                             label: Text('Email:'),
                             hintText: 'example@gmial.com',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
-                        ),
-                        TextField(
-                          style: TextStyle(fontSize: 15),
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.phone),
-                            label: Text('Phone:'),
-                            hintText: '0909......',
                             hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
                           ),
                         ),
@@ -100,8 +88,6 @@ class _RegisterState extends State<Register> {
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.password_rounded),
                             label: Text('Password:'),
-                            hintText: 'qr&76**f',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
                           ),
                         ),
                         SizedBox(
@@ -117,7 +103,7 @@ class _RegisterState extends State<Register> {
                                 print('dudde $state');
                               }
                             },
-                            child: Text('Sign Up')),
+                            child: Text('Sign In')),
                         if (state is RouteandDateLoadFaild)
                           Text(state.errorMessage)
                       ],

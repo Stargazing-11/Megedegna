@@ -1,124 +1,159 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_single_cascade_in_expression_statements, unused_local_variable, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
-import 'package:mengedegna_flutter/Screens/seat.dart';
-import 'package:mengedegna_flutter/Screens/ticket.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Booking/booking_blocs.dart';
+import 'package:mengedegna_flutter/Screens/Loading.dart';
 
-import 'Common/common.dart';
+import '../Logic/blocs/Booking/Booking_Bloc.dart';
 
-class BookInformation extends StatelessWidget {
+class BookInformation extends StatefulWidget {
   const BookInformation({super.key});
+  @override
+  State<BookInformation> createState() => _BookInformationState();
+}
+
+class _BookInformationState extends State<BookInformation> {
+  late BookingBloc bloc;
+  double seat = -1;
+  @override
+  void initState() {
+    super.initState();
+    bloc = context.read<BookingBloc>();
+  }
+
+  Loading loading = Loading();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'From Hawassa to Addis Ababa',
-              style: TextStyle(
-                color: Color.fromARGB(255, 189, 183, 183),
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            Text(
-              'Distance 256 Km',
-              style: TextStyle(
-                color: Color.fromARGB(255, 189, 183, 183),
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            Text(
-              'Price: 655 ETB',
-              style: TextStyle(
-                color: Color.fromARGB(255, 189, 183, 183),
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              width: 200,
-              child: Text(
-                'Please Fill out your Information ',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            field('First Name'),
-            field('Last Name'),
-            field('Phone '),
-            Row(
+      body: BlocConsumer<BookingBloc, BookingState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          print(state);
+          if (state is RouteandDateLoading) {
+            return CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              semanticsLabel: 'Loading...',
+              value: 4,
+            );
+          }
+          return Center(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Addis Ababa To Debre Markos',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      '300 Killometers',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      '629 Birr',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                    Container(
+                      width: 50,
+                      height: 2,
+                      decoration: BoxDecoration(color: Colors.blue),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
                 Text(
-                  'Seat:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+                  "Fill out The Rest of passenger's Information",
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Container(
-                  margin: EdgeInsets.all(3),
-                  width: 40,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color.fromARGB(255, 44, 99, 145)),
-                  child: IconButton(
-                    tooltip: 'Pick A Seat',
-                    icon: Icon(
-                      Icons.chair_rounded,
-                      color: Colors.white,
-                      size: 27,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Seat()));
-                    },
-                  ),
-                ),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    margin: EdgeInsets.only(top: 5),
+                    width: 290,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextField(
+                          style: TextStyle(fontSize: 15),
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.person),
+                              label: Text('First Name:'),
+                              hintText: 'Bruk, ...',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                        ),
+                        TextField(
+                          style: TextStyle(fontSize: 15),
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.person),
+                              label: Text('Last Name:'),
+                              hintText: 'Mekonennen, ...',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                        ),
+                        TextField(
+                          style: TextStyle(fontSize: 15),
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.phone),
+                              label: Text('Phone:'),
+                              hintText: '0909......',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Pick A Date: '),
+                            MaterialButton(
+                              minWidth: 15,
+                              color: Color.fromARGB(255, 52, 153, 131),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/seat');
+                              },
+                              child: seat == -1
+                                  ? Icon(Icons.chair)
+                                  : Text(seat.toString()),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              bloc.add(RouteandDateCheck(
+                                  date: DateTime(2019),
+                                  startCity: 'Addis Ababa',
+                                  destination: 'Debre Markos'));
+                              if (state == RouteandDateLoadSuccess) {
+                                print('dudde $state');
+                              }
+                            },
+                            child: Text('Sign In')),
+                        if (state is RouteandDateLoadFaild)
+                          Text(state.errorMessage)
+                      ],
+                    )),
               ],
             ),
-            ElevatedButton(onPressed: () {}, child: Text('Book')),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.white,
-        backgroundColor: Color.fromARGB(78, 0, 0, 0),
-        elevation: 2.0,
-        currentIndex: 2,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.list_alt_rounded,
-              ),
-              label: 'Booked Trips'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.create_rounded,
-              ),
-              label: 'Book New'),
-        ],
+          );
+        },
       ),
     );
   }

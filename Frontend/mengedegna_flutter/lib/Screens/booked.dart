@@ -1,7 +1,5 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, unnecessary_brace_in_string_interps, unused_import
 import 'package:flutter/material.dart';
-import 'package:mengedegna_flutter/Screens/bookNew.dart';
-
 import 'Common/common.dart';
 import 'Home.dart';
 
@@ -76,13 +74,7 @@ class _BookedState extends State<Booked> {
         backgroundColor: Color.fromARGB(78, 0, 0, 0),
         elevation: 2.0,
         currentIndex: 1,
-        onTap: (value) => {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BookNew(),
-            ),
-          )
-        },
+        onTap: (value) => {Navigator.of(context).pushNamed('/bookNew')},
         items: [
           BottomNavigationBarItem(
               icon: Icon(

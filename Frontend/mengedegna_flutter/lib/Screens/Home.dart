@@ -65,7 +65,9 @@ class Home extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/checkPath');
+              },
               child: Text(
                 'Get Started',
                 style: TextStyle(

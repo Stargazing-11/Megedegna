@@ -8,6 +8,7 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
+        
           child: LoadingAnimationWidget.threeRotatingDots(
         color: Color.fromARGB(255, 196, 114, 8),
         size: 50,
