@@ -11,24 +11,26 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   BookingBloc(
       {required this.busAssignedRepository, required this.bookingRepository})
-      : super(RouteandDateLoading()) {
+      : super(const InitialState()) {
     on<RouteandDateCheck>((event, emit) async {
-      emit(RouteandDateLoading());
+      emit(const RouteandDateLoading());
       try {
+        print('bus Assigned:');
         final busAssigned = await busAssignedRepository.getBusAssigned(
-            event.date, event.startCity, event.destination);
+            DateTime.now(), 'Addis Ababa', 'Debre Markos');
         emit(RouteandDateLoadSuccess(busAssigned: busAssigned));
       } catch (error) {
-        emit(RouteandDateLoadFaild());
+        emit(RouteandDateLoadFaild(errorMessage: error.toString()));
       }
     });
 
     on<BookingCreate>((event, emit) async {
       try {
         await bookingRepository.createBooking(event.booking);
-        emit(CreateBookingLoadSuccess());
+        emit(const CreateBookingLoadSuccess(
+            successMessage: 'Booked Successfully'));
       } catch (error) {
-        emit(CreateBookingLoadFailed());
+        emit(CreateBookingLoadFailed(errorMessage: error.toString()));
       }
     });
   }

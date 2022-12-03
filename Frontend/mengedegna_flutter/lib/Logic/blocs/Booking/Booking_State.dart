@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mengedegna_flutter/Data/Models/Booking.dart';
 import 'package:mengedegna_flutter/Data/Models/BusAssignment.dart';
 
 class BookingState extends Equatable {
@@ -8,18 +9,35 @@ class BookingState extends Equatable {
   List<Object> get props => [];
 }
 
-class RouteandDateLoading extends BookingState {}
-
-class RouteandDateLoadSuccess extends BookingState {
-  final BusAssigned busAssigned;
-
-  RouteandDateLoadSuccess({required this.busAssigned});
+class InitialState extends BookingState {
+  const InitialState();
 }
 
-class RouteandDateLoadFaild extends BookingState {}
+class RouteandDateLoading extends BookingState {
+  const RouteandDateLoading();
+}
 
-class CreateBookingLoading extends BookingState {}
+class RouteandDateLoadSuccess extends BookingState {
+  final Booking busAssigned;
 
-class CreateBookingLoadSuccess extends BookingState {}
+  const RouteandDateLoadSuccess({required this.busAssigned});
+}
 
-class CreateBookingLoadFailed extends BookingState {}
+class RouteandDateLoadFaild extends BookingState {
+  final String errorMessage;
+  const RouteandDateLoadFaild({required this.errorMessage});
+}
+
+class CreateBookingLoading extends BookingState {
+  const CreateBookingLoading();
+}
+
+class CreateBookingLoadSuccess extends BookingState {
+  final String successMessage;
+  const CreateBookingLoadSuccess({required this.successMessage});
+}
+
+class CreateBookingLoadFailed extends BookingState {
+  final String errorMessage;
+  const CreateBookingLoadFailed({required this.errorMessage});
+}
