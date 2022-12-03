@@ -4,15 +4,12 @@ import 'package:mengedegna_flutter/Data/Models/Booking.dart';
 
 class BookingDataProvider {
   final _baseUrl = 'http://localhost:5000/api/booking/';
-  final http.Client httpClient;
-
-  BookingDataProvider({required this.httpClient});
 
   Future<List<Booking>> getBookings() async {
     // todo: implement token here
     var token = '';
     final response =
-        await httpClient.get(Uri.parse('$_baseUrl'), headers: <String, String>{
+        await http.get(Uri.parse('$_baseUrl'), headers: <String, String>{
       'auth-token': token,
     });
     if (response.statusCode == 200) {
@@ -26,7 +23,7 @@ class BookingDataProvider {
   Future<Booking> createBooking(Booking booking) async {
     var token = '';
 
-    final http.Response response = await httpClient.post(
+    final http.Response response = await http.post(
       Uri.parse('$_baseUrl/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -47,7 +44,4 @@ class BookingDataProvider {
       throw Exception('Failed to create Booking');
     }
   }
-
-
 }
-
