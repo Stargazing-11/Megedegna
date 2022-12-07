@@ -8,7 +8,6 @@ const _ = require("lodash");
 router.post("/", async (req, res) => {
   if (findError(req.body))
     return res.status(422).send({ message: "Validation error" });
-
   let user = await User.findOne({ phone: req.body.phone });
   if (!user) return res.status(400).send("Invalid phone or password. ");
 
@@ -17,8 +16,8 @@ router.post("/", async (req, res) => {
   if (!validPassword)
     return res.status(400).send("Invalid phone or password. ");
   res
-    .header("x-auth-token", user.generateAuthToken())
-    .send(_.pick(user, ["_id", "firstName", "lastName", "phone", "role"]));
+    .header("x-auth-token", user.generateAuthToken()).
+    status(200).send(_.pick(user, ["_id", "firstName", "lastName", "phone", "role"]));
 });
 
 function findError(req) {
@@ -29,5 +28,6 @@ function findError(req) {
   let { error } = schema.validate(req);
   return error;
 }
+
 
 module.exports = router;

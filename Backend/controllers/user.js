@@ -4,7 +4,7 @@ const _ = require("lodash");
 
 exports.signup = async function (req, res) {
   if (findError(req.body))
-    return res.status(422).send({ message: "Validation error" });
+    return res.status(422).send({ message: findError(req.body) });
   let result = await User.findOne({ phone: req.body.phone });
   if (result)
     return res.status(400).send({ message: "User already registered" });
@@ -18,5 +18,5 @@ exports.signup = async function (req, res) {
   user = await user.save();
   res
     .header("x-auth-token", user.generateAuthToken())
-    .send(_.pick(user, ["_id", "firstName", "lastName", "phone", "role"]));
+    .status(201).send(_.pick(user, ["_id", "firstName", "lastName", "phone", "role"]));
 };

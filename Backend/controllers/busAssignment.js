@@ -37,6 +37,7 @@ exports.reserveSeat = async function (busAssignmentId, row, column) {
 };
 
 exports.createBusAssignemnt = async function (req, res, next) {
+  print(req.body, 'dude');
   if (!findErrorAlias(req.body)) {
     let bus = await Bus.findById(req.body.bus).populate("route");
     let route = await Route.findById(req.body.route);
@@ -67,9 +68,11 @@ exports.getBusAssignment = async function (req, res, next) {
 
 exports.checkIfBusIsAssigned = async function (req, res, next) {
   if (findError(req.params))
-    return res.status(422).send({ message: "Validation error" });
-  if (String(Date.now()) > String(req.params.date))
-    return res.status(422).send({ message: "The date is incorrect" });
+    return res.status(422).send({ message: findError(req.params) });
+
+  if (String(Date.now()) > String(req.params.date)) {
+    return res.status(404).send("Error on the Date");
+  }
   const route = await findRouteIfExists(
     req.params.startCity,
     req.params.destination
@@ -83,8 +86,8 @@ exports.checkIfBusIsAssigned = async function (req, res, next) {
   }).populate("route");
   if (!busAssignment)
     return res.status(404).send({ message: "No Bus is assigned" });
-  return {
+  return res.status(200).send({
     busAssignment,
     totalPrice: busAssignment.route.distance * getPrice(),
-  };
+  });
 };

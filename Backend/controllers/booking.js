@@ -89,13 +89,13 @@ exports.getPastBookings = async function (req, res, next) {
 
 exports.getFutureBookings = async function (req, res, next) {
   const bookings = await Booking.find({ user: req.user });
-  let pastBookings = [];
+  let futureBooking = [];
   for (var booking = 0; booking < bookings.length; booking++) {
     if (String(bookings[booking].busAssigned.dateOfTravel) > String(Date.now)) {
-      pastBookings.push(bookings[booking]);
+      futureBooking.push(bookings[booking]);
     }
   }
-  return res.status(200).send(pastBookings);
+  return res.status(200).send(futureBooking);
 };
 
 const qrGenerator = async (data, busAssignedId) => {

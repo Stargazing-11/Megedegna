@@ -60,7 +60,9 @@ exports.findError = function (userSchema) {
     role: Joi.string().valid("Admin", "Passenger"),
   });
   let { error } = schema.validate(userSchema);
-  return error;
+  if (error){
+    return error.message;
+  }
 };
 
 exports.User = User;
