@@ -4,11 +4,11 @@ abstract class AuthState {}
 
 class Idle extends AuthState {}
 
-class LoggingIn extends AuthState {}
+class Loading extends AuthState {}
 
-class LoginFailed extends AuthState {}
+class Failed extends AuthState {}
 
-class LoginSuccessful extends AuthState {
+class Successful extends AuthState {
   final UserResponse response;
-  LoginSuccessful({required this.response});
+  Successful({required this.response});
 }

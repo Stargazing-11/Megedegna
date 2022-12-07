@@ -2,57 +2,55 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mengedegna_flutter/Logic/blocs/Booking/booking_blocs.dart';
-import 'package:mengedegna_flutter/Screens/Loading.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_Bloc.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_state.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_event.dart';
 
 import '../Logic/blocs/Booking/Booking_Bloc.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  late BookingBloc bloc;
-
+  late AuthBloc bloc;
+  final TextEditingController _phone_controller = TextEditingController();
+  final TextEditingController _password_controller = TextEditingController();
   @override
   void initState() {
     super.initState();
-    bloc = context.read<BookingBloc>();
+    bloc = context.read<AuthBloc>();
   }
 
-  Loading loading = Loading();
-  List cities = [
-    "Addis Ababa",
-    'Debre Markos',
-    'Bahir Dar',
-    'Hawassa',
-    'Gonder',
-    'Arba Minch',
-    'Dessie',
-    'Ambo'
-  ];
-  List choose = ['Choose Start city', 'Choose destination'];
-
-  DateTime _dateTime = DateTime(2011);
-  String startcity = '';
-  String destination = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<BookingBloc, BookingState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
+      body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
-          print(state);
-          if (state is RouteandDateLoading) {
-            return CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              semanticsLabel: 'Loading...',
-              value: 4,
+          Widget buttonText = const Text('Sign In');
+
+          if (state is Loading) {
+            buttonText = Center(
+                child: LoadingAnimationWidget.threeRotatingDots(
+              color: Color.fromARGB(255, 196, 114, 8),
+              size: 30,
+            ));
+          }
+
+          if (state is Failed) {
+            buttonText = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Login Failed'),
+                SizedBox(width: 3),
+                Icon(Icons.refresh_rounded)
+              ],
             );
+          }
+          if (state is Successful) {
+            buttonText = Text('Logged In');
           }
           return Center(
             child: Column(
@@ -76,41 +74,42 @@ class _LoginState extends State<Login> {
                         TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.email_rounded),
-                            label: Text('Email:'),
-                            hintText: 'example@gmial.com',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
+                              prefixIcon: Icon(Icons.phone),
+                              label: Text('phone:'),
+                              hintText: '0987******',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                          controller: _phone_controller,
                         ),
                         TextField(
                           style: TextStyle(fontSize: 15),
                           obscureText: true,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.password_rounded),
+                            prefixIcon: Icon(Icons.security),
                             label: Text('Password:'),
                           ),
+                          controller: _password_controller,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              bloc.add(RouteandDateCheck(
-                                  date: DateTime(2019),
-                                  startCity: 'Addis Ababa',
-                                  destination: 'Debre Markos'));
-                              if (state == RouteandDateLoadSuccess) {
-                                print('dudde $state');
-                              }
+                              bloc.add(SignIn(
+                                  phone: _phone_controller.text,
+                                  password: _password_controller.text));
                             },
                             child: Text('Sign In')),
-                        if (state is RouteandDateLoadFaild)
-                          Text(state.errorMessage)
                       ],
                     )),
               ],
             ),
           );
+        },
+        listener: (context, state) {
+          print(bloc);
+          if (state is Successful) Navigator.of(context).pushNamed('/checkPath');
         },
       ),
     );

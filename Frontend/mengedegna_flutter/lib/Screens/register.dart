@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_Bloc.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_event.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_state.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Booking/booking_blocs.dart';
-import 'package:mengedegna_flutter/Screens/Loading.dart';
 
 import '../Logic/blocs/Booking/Booking_Bloc.dart';
 
@@ -14,31 +17,51 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  late BookingBloc bloc;
+  late AuthBloc bloc;
+  final TextEditingController _phone_controller = TextEditingController();
+  final TextEditingController _password_controller = TextEditingController();
+  final TextEditingController _email_controller = TextEditingController();
+  final TextEditingController _firstName_controller = TextEditingController();
+  final TextEditingController _lastName_controller = TextEditingController();
+  String email = 'samuelkifle199314@gmail.com';
+  String firstName = 'Samuel';
+  String lastName = 'Kifle';
+  String phone = '0903193236';
+  String password = 'tejoboyj';
 
   @override
   void initState() {
     super.initState();
-    bloc = context.read<BookingBloc>();
+    bloc = context.read<AuthBloc>();
   }
-
-  Loading loading = Loading();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<BookingBloc, BookingState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
+      body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
+          Widget buttonText = const Text('Sign Up');
           print(state);
-          if (state is RouteandDateLoading) {
-            return CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              semanticsLabel: 'Loading...',
-              value: 4,
+          if (state is Loading) {
+            buttonText = Center(
+                child: LoadingAnimationWidget.threeRotatingDots(
+              color: Color.fromARGB(255, 196, 114, 8),
+              size: 30,
+            ));
+          }
+
+          if (state is Failed) {
+            buttonText = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Login Failed'),
+                SizedBox(width: 3),
+                Icon(Icons.refresh_rounded)
+              ],
             );
+          }
+          if (state is Successful) {
+            buttonText = Text('Created');
           }
           return Center(
             child: Column(
@@ -62,69 +85,84 @@ class _RegisterState extends State<Register> {
                         TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            label: Text('First Name:'),
-                            hintText: 'Bruk, ...',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
+                              prefixIcon: Icon(Icons.person),
+                              label: Text('First Name:'),
+                              hintText: 'Bruk, ...',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                          controller: _firstName_controller,
                         ),
                         TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            label: Text('Last Name:'),
-                            hintText: 'Mekonennen, ...',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
-                        ),TextField(
+                              prefixIcon: Icon(Icons.person),
+                              label: Text('Last Name:'),
+                              hintText: 'Mekonennen, ...',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                          controller: _lastName_controller,
+                        ),
+                        TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email_rounded),
                             label: Text('Email:'),
                             hintText: 'example@gmial.com',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
+                            hintStyle: TextStyle(
+                                color: Color.fromARGB(110, 168, 166, 166),
+                                fontSize: 13),
                           ),
+                          controller: _email_controller,
                         ),
                         TextField(
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.phone),
-                            label: Text('Phone:'),
-                            hintText: '0909......',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
+                              prefixIcon: Icon(Icons.phone),
+                              label: Text('Phone:'),
+                              hintText: '0909......',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                          controller: _phone_controller,
                         ),
                         TextField(
                           style: TextStyle(fontSize: 15),
                           obscureText: true,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.password_rounded),
-                            label: Text('Password:'),
-                            hintText: 'qr&76**f',
-                            hintStyle: TextStyle(color: Color.fromARGB(110, 168, 166, 166), fontSize: 13)
-                          ),
+                              prefixIcon: Icon(Icons.password_rounded),
+                              label: Text('Password:'),
+                              hintText: 'qr&76**f',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(110, 168, 166, 166),
+                                  fontSize: 13)),
+                          controller: _password_controller,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              bloc.add(RouteandDateCheck(
-                                  date: DateTime(2019),
-                                  startCity: 'Addis Ababa',
-                                  destination: 'Debre Markos'));
-                              if (state == RouteandDateLoadSuccess) {
-                                print('dudde $state');
-                              }
+                              bloc.add(
+                                AddUser(
+                                    email: _email_controller.text,
+                                    firstName: _firstName_controller.text,
+                                    lastName: _lastName_controller.text,
+                                    password: _password_controller.text,
+                                    phone: _phone_controller.text),
+                              );
                             },
-                            child: Text('Sign Up')),
-                        if (state is RouteandDateLoadFaild)
-                          Text(state.errorMessage)
+                            child: buttonText),
                       ],
                     )),
               ],
             ),
           );
+        },
+        listener: (context, state) {
+          print(bloc);
+          if (state is Successful) Navigator.of(context).pushNamed('/login');
         },
       ),
     );
