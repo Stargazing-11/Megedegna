@@ -7,25 +7,38 @@ class BusAssigned extends Equatable {
   List? occupied;
   String? startCity;
   String? destination;
-
+  String? id;
+  int? price;
+  int? distance;
   BusAssigned(
       {required this.date,
       required this.occupied,
-      required this.startCity, required this.destination});
+      required this.startCity,
+      required this.destination,
+      required this.id,
+      required this.price,
+      required this.distance});
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 
-  factory BusAssigned.fromJson(Map<String, dynamic> json) {
-    DateTime date = json['dateOfTravle'];
-    List occupied = json['occupied'];
-    String startCity = json['startCity'];
-    String destination = json['destination'];
-
+  factory BusAssigned.fromJson(Map<dynamic, dynamic> json) {
+    print(json['route']);
+    DateTime date = DateTime.parse(json["busAssignment"]['dateOfTravel']);
+    List occupied = json["busAssignment"]['occupied'];
+    String startCity = json["busAssignment"]['route']['startCity'].toString();
+    String destination =
+        json["busAssignment"]['route']['destination'].toString();
+    String id = json["busAssignment"]['_id'];
+    int price = json['totalPrice'];
+    int distance = json["busAssignment"]['route']['distance'];
     BusAssigned busAssigned = BusAssigned(
       date: date,
       occupied: occupied,
       startCity: startCity,
-      destination:destination
+      destination: destination,
+      id: id,
+      price: price,
+      distance: distance,
     );
     return busAssigned;
   }

@@ -11,11 +11,10 @@ class BusAssignedRepository {
 
   BusAssignedRepository({required this.dataProvider});
 
-  Future<Booking> getBusAssigned(
+  Future<BusAssigned> getBusAssigned(
       DateTime date, String startCity, String destination) async {
-    print('came here');
-    List busesAssigned =
+    BusAssigned busAssigned =
         await dataProvider.checkDateAndRoute(startCity, destination, date);
-    return busesAssigned[0];
+    return busAssigned;
   }
 }
