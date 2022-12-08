@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_single_cascade_in_expression_statements, unused_local_variable, unrelated_type_equality_checks
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_single_cascade_in_expression_statements, unused_local_variable, unrelated_type_equality_checks, non_constant_identifier_names, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +6,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_Bloc.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_event.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_state.dart';
-import 'package:mengedegna_flutter/Logic/blocs/Booking/booking_blocs.dart';
-
-import '../Logic/blocs/Booking/Booking_Bloc.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -41,7 +38,6 @@ class _RegisterState extends State<Register> {
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
           Widget buttonText = const Text('Sign Up');
-          print(state);
           if (state is Loading) {
             buttonText = Center(
                 child: LoadingAnimationWidget.threeRotatingDots(
@@ -162,7 +158,7 @@ class _RegisterState extends State<Register> {
         },
         listener: (context, state) {
           print(bloc);
-          if (state is Successful) Navigator.of(context).pushNamed('/login');
+          if (state is Successful) Navigator.of(context).pushNamed('/checkPath');
         },
       ),
     );

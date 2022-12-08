@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_single_cascade_in_expression_statements, unused_local_variable, unrelated_type_equality_checks
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_single_cascade_in_expression_statements, unused_local_variable, unrelated_type_equality_checks, sort_child_properties_last, unnecessary_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Booking/booking_blocs.dart';
 import 'package:mengedegna_flutter/Screens/Loading.dart';
 
@@ -42,17 +43,29 @@ class _CheckPathState extends State<CheckPath> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<BookingBloc, BookingState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
         builder: (context, state) {
-          print(state);
+          Widget buttonText = const Text('Next');
           if (state is RouteandDateLoading) {
-            return CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              semanticsLabel: 'Loading...',
-              value: 4,
+            buttonText = Center(
+              child: LoadingAnimationWidget.threeRotatingDots(
+                color: Color.fromARGB(255, 196, 114, 8),
+                size: 30,
+              ),
             );
+          }
+
+          if (state is RouteandDateLoadFaild) {
+            buttonText = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('No Route'),
+                SizedBox(width: 3),
+                Icon(Icons.refresh_rounded)
+              ],
+            );
+          }
+          if (state is RouteandDateLoadSuccess) {
+            buttonText = Text('Found!');
           }
           return Center(
             child: Column(
@@ -137,15 +150,16 @@ class _CheckPathState extends State<CheckPath> {
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              bloc.add(RouteandDateCheck(
-                                  date: DateTime(2019),
-                                  startCity: 'Addis Ababa',
-                                  destination: 'Debre Markos'));
-                              if (state == RouteandDateLoadSuccess) {
-                                print('dudde $state');
-                              }
+                              bloc.add(
+                                RouteandDateCheck(
+                                  date: _dateTime,
+                                  startCity: startcity,
+                                  destination: destination,
+                                  seat: [],
+                                ),
+                              );
                             },
-                            child: Text('Next')),
+                            child: buttonText),
                         if (state is RouteandDateLoadFaild)
                           Text(state.errorMessage)
                       ],
@@ -153,6 +167,11 @@ class _CheckPathState extends State<CheckPath> {
               ],
             ),
           );
+        },
+        listener: (context, state) {
+          if (state is RouteandDateLoadSuccess) {
+            Navigator.of(context).pushNamed('/bookInformation');
+          }
         },
       ),
     );

@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.blue, brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: _appRouter.onGenerateRoute,
-      // home: Login(),
     );
   }
 

@@ -66,7 +66,7 @@ class Home extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('/checkPath');
+                Navigator.of(context).pushNamed('/register');
               },
               child: Text(
                 'Get Started',
