@@ -2,10 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mengedegna_flutter/Data/Dataproviders/auth_provider.dart';
 import 'package:mengedegna_flutter/Data/Dataproviders/booking_provider.dart';
 import 'package:mengedegna_flutter/Data/Dataproviders/busAssignment_provider.dart';
+import 'package:mengedegna_flutter/Data/Repositories/Auth_Repository.dart';
 import 'package:mengedegna_flutter/Data/Repositories/BookingRepository.dart';
 import 'package:mengedegna_flutter/Data/Repositories/BusAssignedRepository.dart';
+import 'package:mengedegna_flutter/Logic/blocs/Auth/auth_Bloc.dart';
 import 'package:mengedegna_flutter/Logic/blocs/Booking/Booking_Bloc.dart';
 import 'package:mengedegna_flutter/Screens/Home.dart';
 import 'package:mengedegna_flutter/Screens/Login.dart';
@@ -23,22 +26,24 @@ class AppRouter {
       busAssignedRepository:
           BusAssignedRepository(dataProvider: BusAssignmentProvider()));
 
+  final AuthBloc _authBloc =
+      AuthBloc(authRepository: AuthRepository(authProvider: AuthProvider()));
   Route onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                value: _bookingBloc, child: BookInformation()));
+            builder: (_) =>
+                BlocProvider.value(value: _authBloc, child: Home()));
         break;
       case '/register':
         return MaterialPageRoute(
             builder: (_) =>
-                BlocProvider.value(value: _bookingBloc, child: Register()));
+                BlocProvider.value(value: _authBloc, child: Register()));
         break;
       case '/login':
         return MaterialPageRoute(
             builder: (_) =>
-                BlocProvider.value(value: _bookingBloc, child: Login()));
+                BlocProvider.value(value: _authBloc, child: Login()));
         break;
       case '/checkPath':
         return MaterialPageRoute(
