@@ -1,9 +1,9 @@
 # Megedegna
 Bus Ticket Booking System
-This a fulstack project made with Flutter for the mobile application and Express Js and Mongodb for the backend Development.
+This a fulstack project made with Flutter for the mobile application and Express Js and Mongodb for the backend Development.\n
 
 Features?
-  Users can create account and book new ticket for their future trip.
+  Users can create account and book new ticket for their future trip \n.
   User can choose starting city, destination and date for their trip
   After successful booking users will get a PDF formated ticket with qr code and their basic information on it.
  
