@@ -15,16 +15,17 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<RouteandDateCheck>((event, emit) async {
       emit(const RouteandDateLoading());
       try {
-        print('bus Assigned:');
         final busAssigned = await busAssignedRepository.getBusAssigned(
-            DateTime.now(), 'Addis Ababa', 'Debre Markos');
-        emit(RouteandDateLoadSuccess(busAssigned: busAssigned));
+            event.date, event.destination, event.startCity);
+        emit(RouteandDateLoadSuccess(
+            busAssigned: busAssigned, seat: event.seat));
       } catch (error) {
         emit(RouteandDateLoadFaild(errorMessage: error.toString()));
       }
     });
 
     on<BookingCreate>((event, emit) async {
+      emit(const CreateBookingLoading());
       try {
         await bookingRepository.createBooking(event.booking);
         emit(const CreateBookingLoadSuccess(
@@ -32,6 +33,19 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       } catch (error) {
         emit(CreateBookingLoadFailed(errorMessage: error.toString()));
       }
+    });
+
+    on<SelectSeat>((event, emit) async {
+      emit(SelectSeatState(seat: event.seat));
+    });
+
+    on<ChooseSeat>((event, emit) async {
+      emit(RouteandDateLoadSuccess(
+          busAssigned: event.busAssigned!, seat: event.seat));
+    });
+
+    on<PickSeat>((event, emit) async {
+      emit(PickSeatState(seat: event.seat, occupied: event.occupied));
     });
   }
 }
