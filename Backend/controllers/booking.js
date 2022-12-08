@@ -18,6 +18,7 @@ exports.createBooking = async function (req, res, next) {
   if (busAssigned.occupied[row][column] == 1) {
     return res.status(401).send("This Seat is Already Taken");
   }
+
   if (!findError(req.body)) {
     let booking = Booking({
       user: req.user,
